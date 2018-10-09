@@ -1,0 +1,224 @@
+<!DOCTYPE html >
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Maroondah City Council Google Maps</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+
+    <script>
+      var customLabel = {
+        Hospital: {
+          label: 'H'
+        },
+        Clinic: {
+          label: 'C'
+        },
+        Laboratory: {
+          label: 'L'
+        },
+        Pharmacy: {
+          label: 'P'
+        }
+      };
+function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: new google.maps.LatLng(-37.826523,145.246562),
+          zoom: 16
+        });
+        var infoWindow = new google.maps.InfoWindow;
+          
+          // Change this depending on the name of your PHP or XML file
+          downloadUrl('http://localhost:8080/gagankang/healthdatabase.php', function(data) {
+            var xml = data.responseXML;
+            console.log(xml);
+            var markers = xml.documentElement.getElementsByTagName('clinic');
+            Array.prototype.forEach.call(markers, function(markerElem) {
+              var id = markerElem.getAttribute('CID');
+              var name = markerElem.getAttribute('Name');
+              var street = markerElem.getAttribute('Street');
+              var suburb = markerElem.getAttribute('Suburb');
+              var state = markerElem.getAttribute('State');
+              var postcode = markerElem.getAttribute('Postcode');
+              var website = markerElem.getAttribute('Website');
+              var phone = markerElem.getAttribute('Phone');
+              var latitude = markerElem.getAttribute('Latitude');
+              var longitude = markerElem.getAttribute('Longitude');
+              var type = markerElem.getAttribute('Type');
+              var aid = markerElem.getAttribute('AID');
+              var monday = markerElem.getAttribute('Monday');
+              var tuesday = markerElem.getAttribute('Tuesday');
+              var wednesday = markerElem.getAttribute('Wednesday');
+              var thursday = markerElem.getAttribute('Thursday');
+              var friday = markerElem.getAttribute('Friday');
+              var saturday = markerElem.getAttribute('Saturday');
+              var sunday = markerElem.getAttribute('Sunday');
+              var fid = markerElem.getAttribute('FID');
+              var fname = markerElem.getAttribute('Fname');
+              var point = new google.maps.LatLng(
+                  parseFloat(markerElem.getAttribute('Latitude')),
+                  parseFloat(markerElem.getAttribute('Longitude')));
+
+              var infowincontent = document.createElement('div');
+              var strong = document.createElement('h3');
+              strong.textContent = name;
+              infowincontent.appendChild(strong);
+              infowincontent.appendChild(document.createElement('br'));
+
+              infowincontent.appendChild(document.createElement('br'));
+              var general_information_heading = document.createElement('strong');
+              general_information_heading.textContent = "General Information:";
+              infowincontent.appendChild(general_information_heading);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var street_txt = document.createElement('text');
+              street_txt.textContent = "Street: " + street;
+              infowincontent.appendChild(street_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+
+              var suburb_txt = document.createElement('text');
+              suburb_txt.textContent = "Suburb: " + suburb;
+              infowincontent.appendChild(suburb_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var state_txt = document.createElement('text');
+              state_txt.textContent = "State: " + state;
+              infowincontent.appendChild(state_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var postcode_txt = document.createElement('text');
+              postcode_txt.textContent = "Postcode: " + postcode;
+              infowincontent.appendChild(postcode_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var website_txt = document.createElement('text');
+              website_txt.textContent = "Website: " + website;
+              infowincontent.appendChild(website_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var phone_txt = document.createElement('text');
+              phone_txt.textContent = "Phone: " + phone;
+              infowincontent.appendChild(phone_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+
+              var latitude_txt = document.createElement('text');
+              latitude_txt.textContent = "Latitude: " + latitude;
+              infowincontent.appendChild(latitude_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var longitude_txt = document.createElement('text');
+              longitude_txt.textContent = "Longitude: " + longitude;
+              infowincontent.appendChild(longitude_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+
+              infowincontent.appendChild(document.createElement('br'));
+              var facility_heading = document.createElement('strong');
+              facility_heading.textContent = "Facilities:";
+              infowincontent.appendChild(facility_heading);
+
+              var facility = document.createElement('text');
+              facility.textContent = fname;
+              infowincontent.appendChild(facility);
+              infowincontent.appendChild(document.createElement('br'));
+
+              infowincontent.appendChild(document.createElement('br'));
+              var hours_heading = document.createElement('strong');
+              hours_heading.textContent = "Opening Hours:";
+              infowincontent.appendChild(hours_heading);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var monday_txt = document.createElement('text');
+              monday_txt.textContent = "Monday: " + monday;
+              infowincontent.appendChild(monday_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var tuesday_txt = document.createElement('text');
+              tuesday_txt.textContent = "Tuesday: " + tuesday;
+              infowincontent.appendChild(tuesday_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var wednesday_txt = document.createElement('text');
+              wednesday_txt.textContent = "Wednesday: " + wednesday;
+              infowincontent.appendChild(wednesday_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var thursday_txt = document.createElement('text');
+              thursday_txt.textContent = "Thursday: " + thursday;
+              infowincontent.appendChild(thursday_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var friday_txt = document.createElement('text');
+              friday_txt.textContent = "Friday: " + friday;
+              infowincontent.appendChild(friday_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var saturday_txt = document.createElement('text');
+              saturday_txt.textContent = "Saturday: " + saturday;
+              infowincontent.appendChild(saturday_txt);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var sunday_txt = document.createElement('text');
+              sunday_txt.textContent = "Sunday: " + sunday;
+              infowincontent.appendChild(sunday_txt);
+              infowincontent.appendChild(document.createElement('br'));
+              
+             
+              var icon = customLabel[type] || {};
+              var marker = new google.maps.Marker({
+                map: map,
+                position: point,
+                label: icon.label
+              });
+              marker.addListener('click', function() {
+                infoWindow.setContent(infowincontent);
+                infoWindow.open(map, marker);
+              });
+            });
+          });
+        }
+
+
+
+        
+function downloadUrl(url,callback) {
+ var request = window.ActiveXObject ?
+     new ActiveXObject('Microsoft.XMLHTTP') :
+     new XMLHttpRequest;
+
+ request.onreadystatechange = function() {
+   if (request.readyState == 4) {
+     request.onreadystatechange = doNothing;
+     callback(request, request.status);
+   }
+ };
+
+ request.open('GET', url, true);
+ request.send(null);
+}
+function doNothing() {}
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfmAurCyL3k8GvyV4ESSVMkpfs6bHdABs&callback=initMap">
+    </script>
+  </body>
+</html>
+
+
